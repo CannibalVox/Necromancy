@@ -46,7 +46,7 @@ import cpw.mods.fml.common.registry.VillagerRegistry.IVillageCreationHandler;
 import cpw.mods.fml.common.registry.VillagerRegistry.IVillageTradeHandler;
 
 public class PacketHandler implements IPacketHandler, IGuiHandler, ICraftingHandler, IVillageCreationHandler, IVillageTradeHandler {
-
+	
 	@Override
 	public Object getServerGuiElement(int ID, net.minecraft.entity.player.EntityPlayer player, net.minecraft.world.World world, int x, int y, int z) {
 		if (ID == BlockAltar.guiID)
@@ -57,7 +57,7 @@ public class PacketHandler implements IPacketHandler, IGuiHandler, ICraftingHand
 			return new ContainerScentBurner(player.inventory, player.worldObj.getBlockTileEntity(x, y, z));
 		return null;
 	}
-
+	
 	@Override
 	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
 		if (ID == BlockAltar.guiID)
@@ -68,13 +68,13 @@ public class PacketHandler implements IPacketHandler, IGuiHandler, ICraftingHand
 			return new GuiScentBurner(player.inventory, (TileEntityScentBurner) player.worldObj.getBlockTileEntity(x, y, z));
 		return null;
 	}
-
+	
 	@Override
 	public void onCrafting(EntityPlayer player, ItemStack item, IInventory craftMatrix) {
-		if (item != null && item.getItemName().equals("item.Necronomicon")) {
+		if (item != null && item.getUnlocalizedName().equals("item.Necronomicon")) {
 			player.addStat(AchievementNecromancy.NecronomiconAchieve, 1);
 		}
-		if (item != null && item.getItemName().equals("tile.Sewing Machine")) {
+		if (item != null && item.getUnlocalizedName().equals("tile.Sewing Machine")) {
 			player.addStat(AchievementNecromancy.SewingAchieve, 1);
 		}
 		if (item != null && item.itemID == new ItemStack(ItemNecromancy.bucketBlood).itemID) {
@@ -83,20 +83,20 @@ public class PacketHandler implements IPacketHandler, IGuiHandler, ICraftingHand
 		if (item != null && item.itemID == ItemGeneric.getItemStackFromName("Jar of Blood").itemID && item.getItemDamage() == ItemGeneric.getItemStackFromName("Jar of Blood").getItemDamage()) {
 			player.inventory.addItemStackToInventory(new ItemStack(net.minecraft.item.Item.bucketEmpty));
 		}
-		if (item != null && item.getItemName().equals("tile.skullWall")) {
-			Necromancy.loggerNecromancy.info(craftMatrix.getStackInSlot(0) + " is in " + craftMatrix.getStackInSlot(0).getItemName());
-			item.stackTagCompound.setString("Base", craftMatrix.getStackInSlot(1).getItemName());
+		if (item != null && item.getUnlocalizedName().equals("tile.skullWall")) {
+			Necromancy.loggerNecromancy.info(craftMatrix.getStackInSlot(0) + " is in " + craftMatrix.getStackInSlot(0).getUnlocalizedName());
+			item.stackTagCompound.setString("Base", craftMatrix.getStackInSlot(1).getUnlocalizedName());
 			item.stackTagCompound.setString("Skull1", ItemNecroSkull.skullTypes[craftMatrix.getStackInSlot(1).getItemDamage()]);
 			item.stackTagCompound.setString("Skull2", ItemNecroSkull.skullTypes[craftMatrix.getStackInSlot(4).getItemDamage()]);
 			item.stackTagCompound.setString("Skull3", ItemNecroSkull.skullTypes[craftMatrix.getStackInSlot(5).getItemDamage()]);
-
+			
 		}
 	}
-
+	
 	@Override
 	public void onSmelting(EntityPlayer player, ItemStack item) {
 	}
-
+	
 	@Override
 	public void onPacketData(INetworkManager manager, Packet250CustomPayload packet, Player player) {
 		if (packet.data[0] == 0) {
@@ -109,23 +109,23 @@ public class PacketHandler implements IPacketHandler, IGuiHandler, ICraftingHand
 			playerEntity.getEntityData().setString(playerEntity.username, "enemy");
 		}
 	}
-
+	
 	@Override
 	public StructureVillagePieceWeight getVillagePieceWeight(Random random, int i) {
 		return new StructureVillagePieceWeight(ComponentVillageCemetery.class, 5, 1);
 	}
-
+	
 	@Override
 	public Class<?> getComponentClass() {
 		return ComponentVillageCemetery.class;
 	}
-
+	
 	@Override
 	public Object buildComponent(StructureVillagePieceWeight villagePiece, ComponentVillageStartPiece startPiece, @SuppressWarnings("rawtypes") List pieces, Random random, int p1, int p2, int p3, int p4, int p5) {
 		ComponentVillageCemetery cemetery = ComponentVillageCemetery.func_74919_a(startPiece, pieces, random, p1, p2, p3, p4, p5);
 		return cemetery;
 	}
-
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public void manipulateTradesForVillager(EntityVillager villager, MerchantRecipeList recipeList, Random random) {
