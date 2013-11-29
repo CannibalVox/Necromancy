@@ -24,28 +24,28 @@ public class CommandMinion extends CommandBase {
     @Override
     public void processCommand(ICommandSender var1, String[] var2) {
         if (var2.length >= 2) {
-            EntityPlayerMP player = func_82359_c(var1, var1.getCommandSenderName());
+            EntityPlayerMP player = getPlayer(var1, var1.getCommandSenderName());
             NBTTagCompound nbt = player.getEntityData();
             Packet250CustomPayload packet = null;
             if (var2[0].equals("set")) {
                 if (var2[1].equals("aggressive")) {
                     nbt.setBoolean("aggressive", true);
                     packet = new Packet250CustomPayload("NecromancyMod", new byte[] { 0, 1 });
-                    var1.sendChatToPlayer(new ChatMessageComponent().func_111072_b("Minions are set to aggressive"));
+                    var1.sendChatToPlayer(new ChatMessageComponent().addKey("Minions are set to aggressive"));
                 } else if (var2[1].equals("passive")) {
                     nbt.setBoolean("aggressive", false);
                     packet = new Packet250CustomPayload("NecromancyMod", new byte[] { 0, 0 });
-                    var1.sendChatToPlayer(new ChatMessageComponent().func_111072_b("Minions are set to passive"));
+                    var1.sendChatToPlayer(new ChatMessageComponent().addKey("Minions are set to passive"));
                 } else
                     throw new WrongUsageException("minion", new Object[0]);
             } else if (var2[0].equals("friend")) {
                 nbt.setString(var2[1], "friend");
-                packet = new Packet250CustomPayload("NecromancyMod", new byte[] { 1, (byte) func_82359_c(var1, var2[1]).entityId });
-                var1.sendChatToPlayer(new ChatMessageComponent().func_111072_b(var2[1] + " is now a friend"));
+                packet = new Packet250CustomPayload("NecromancyMod", new byte[] { 1, (byte) getPlayer(var1, var2[1]).entityId });
+                var1.sendChatToPlayer(new ChatMessageComponent().addKey(var2[1] + " is now a friend"));
             } else if (var2[0].equals("enemy")) {
                 nbt.setString(var2[1], "enemy");
-                packet = new Packet250CustomPayload("NecromancyMod", new byte[] { 2, (byte) func_82359_c(var1, var2[1]).entityId });
-                var1.sendChatToPlayer(new ChatMessageComponent().func_111072_b(var2[1] + " is now an enemy"));
+                packet = new Packet250CustomPayload("NecromancyMod", new byte[] { 2, (byte) getPlayer(var1, var2[1]).entityId });
+                var1.sendChatToPlayer(new ChatMessageComponent().addKey(var2[1] + " is now an enemy"));
             } else
                 throw new WrongUsageException("minion", new Object[0]);
             PacketDispatcher.sendPacketToAllPlayers(packet);

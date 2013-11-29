@@ -51,7 +51,7 @@ public class EntityNecroFX extends EntityFX {
         tessellator1.addVertexWithUV(f5 + par3 * f4 + par6 * f4, f6 + par4 * f4, f7 + par5 * f4 + par7 * f4, f, f2);
         tessellator1.addVertexWithUV(f5 + par3 * f4 - par6 * f4, f6 - par4 * f4, f7 + par5 * f4 - par7 * f4, f, f3);
         tessellator1.draw();
-        ClientProxy.mc.renderEngine.func_110577_a(ReferenceNecromancy.TEXTURES_PARTICLES);
+        ClientProxy.mc.renderEngine.bindTexture(ReferenceNecromancy.TEXTURES_PARTICLES);
     }
 
     @Override

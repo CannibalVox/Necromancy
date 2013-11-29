@@ -32,7 +32,7 @@ public class TileEntityAltarRenderer extends TileEntitySpecialRenderer implement
 
     RenderBlocks renderBlocks = new RenderBlocks();
     private ModelBook modelBook = new ModelBook();
-    public ResourceLocation terrain = TextureMap.field_110575_b;
+    public ResourceLocation terrain = TextureMap.locationBlocksTexture;
     public ResourceLocation book = new ResourceLocation("textures/entity/enchanting_table_book.png");
 
     public TileEntityAltarRenderer() {

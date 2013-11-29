@@ -56,7 +56,7 @@ public class ItemNecronomiconRenderer implements IItemRenderer {
         GL11.glRotatef(rotY, 0, 1, 0);
         GL11.glRotatef(rotZ, 0, 0, 1);
         GL11.glScalef(scale, scale, scale);
-        ClientProxy.mc.renderEngine.func_110577_a(ReferenceNecromancy.TEXTURES_MODELS_NECRONOMICON);
+        ClientProxy.mc.renderEngine.bindTexture(ReferenceNecromancy.TEXTURES_MODELS_NECRONOMICON);
         book.page = 0;
         // GL11.glRotatef((float)(book.page/(book.page+1)), 0, -1, 0);
         modelInteractive.render(null, 1, 0, 0, (float) (book.page * 1.6), 1, 1);

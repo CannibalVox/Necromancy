@@ -32,12 +32,12 @@ public class ModelScytheSpecial extends ModelBase {
     }
 
     public void render() {
-        ClientProxy.mc.renderEngine.func_110577_a(metal);;
+        ClientProxy.mc.renderEngine.bindTexture(metal);;
         scytheSpecial.renderPart("Blade_Blade_Material");
-        ClientProxy.mc.renderEngine.func_110577_a(cloth);
+        ClientProxy.mc.renderEngine.bindTexture(cloth);
         scytheSpecial.renderPart("Joint2_Joint2_Material");
         scytheSpecial.renderPart("Joint1_Joint1_Material");
-        ClientProxy.mc.renderEngine.func_110577_a(gun);
+        ClientProxy.mc.renderEngine.bindTexture(gun);
         scytheSpecial.renderPart("Handle_Handle_Material");
     }
 }

@@ -148,7 +148,7 @@ public class ClientProxy extends CommonProxy {
     }
     
     public static void bindTexture(ResourceLocation par1ResourceLocation) {
-        mc.renderEngine.func_110577_a(par1ResourceLocation);
+        mc.renderEngine.bindTexture(par1ResourceLocation);
     }
 
     @Override
