@@ -136,6 +136,8 @@ public class Necromancy {
         villageComponentsList.add(PacketHandler.class);
 
         GameRegistry.registerWorldGenerator(new WorldGenerator());
+
+        net.minecraft.world.gen.structure.MapGenStructureIO.func_143031_a(com.sirolf2009.necromancy.generation.villagecomponent.ComponentVillageCemetery.class, "necromancy:CemetaryComponent");
     }
     
     private int createShader(String filename, int shaderType) throws Exception {

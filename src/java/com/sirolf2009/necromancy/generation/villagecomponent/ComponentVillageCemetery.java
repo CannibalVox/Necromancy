@@ -20,6 +20,9 @@ public class ComponentVillageCemetery extends ComponentVillage {
 
     private int averageGroundLevel = -1;
 
+    public ComponentVillageCemetery() {
+	}
+
     public ComponentVillageCemetery(ComponentVillageStartPiece par1ComponentVillageStartPiece, int par2, Random par3Random, StructureBoundingBox par4StructureBoundingBox, int par5) {
         super(par1ComponentVillageStartPiece, par2);
         coordBaseMode = par5;
