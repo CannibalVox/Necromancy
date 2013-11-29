@@ -1,95 +1,240 @@
-<?xml version="1.0" ?> 
-<project name="Necromancy" default="build">
+<project name="Necromancy" default="install" basedir=".">
+	<property environment="env" />
 
-	<property file="build.properties" prefix="build"/>
-	<property file="build_number.properties" prefix="build_number"/>
+	<property name="project.name" value="Necromancy" />
+	<property name="src.dir" value="src/java" />
+	<property name="resources.dir" value="src/assets/Necromancy" />
+	<property name="versionclass.dir" value="com\sirolf2009\necromancy\lib" />
+	<property name="versionclass.file" value="ReferenceNecromancy.java"/>
 
-	<target name="clean">
-		<delete file="${build.dir.development}\forge\mcp\src\minecraft\mcmod.info" />
-		<delete dir="${build.dir.development}\forge\mcp\src\minecraft\com\sirolf2009" />
-		<delete dir="${build.dir.development}\forge\mcp\reobf\minecraft" />
-	</target>
+	<property name="minecraft.version" value="1.6.4" />
+	<property name="forge.forgeversion" value="9.11.1" />
+	<property name="forge.buildnum" value="953" />
 
-	<target name="prep">
-		<copy todir="${build.dir.development}\forge\mcp\src\minecraft">
-					<fileset dir="${build.dir.development}\source\Necromancy\common\" />
+	<property name="build.dir" value="build" />
+	<property name="classes.dir" value="${build.dir}/packaging" />
+	<property name="resourcePack.dir" value="${classes.dir}/assets/Necromancy" />
+	<property name="apiclasses.dir" value="${build.dir}/api-packaging" />
+	<property name="forge.version" value="${minecraft.version}-${forge.forgeversion}.${forge.buildnum}" />
+	<property name="forge.url" value="http://files.minecraftforge.net/minecraftforge/minecraftforge-src-${forge.version}.zip" />
+	<property name="forge.dir" value="${build.dir}/forge" />
+	<property name="mcp.dir" value="${forge.dir}/mcp" />
+	<property name="mcpsrc.dir" value="${mcp.dir}/src/minecraft" />
+
+	<property name="package.meta-inf" value="META-INF" />
+	<property name="dist.dir" value="${build.dir}/dist" />
+
+	<property name="download.dir" value="${build.dir}/downloads" />
+
+	<property name="lib.dir" value="${mcp.dir}/lib" />
+
+	<property file="${forge.dir}/forgeversion.properties" />
+	<condition property="forge.already.installed">
+		<equals arg1="${forge.build.number}" arg2="${forge.buildnum}" />
+	</condition>
+
+	<mkdir dir="${download.dir}"/>
+	<mkdir dir="${build.dir}" />
+	
+	<target name="get-version" depends="setup-forge">
+		<!-- Copy source -->
+		<copy todir="${mcpsrc.dir}" overwrite="true">
+			<fileset dir="${src.dir}"/>
 		</copy>
-		<copy todir="${build.dir.development}\forge\mcp\src\minecraft">
-					<fileset dir="${build.dir.development}\source\Necromancy\resources\" />
+
+		<!-- Get the version from the mcmod.info -->
+		<script language="javascript">
+		    importClass(java.io.File);
+		    importClass(java.nio.file.Files)
+		    importClass(java.io.FileReader);
+		    importClass(java.io.BufferedReader);
+		    importClass(java.io.FileWriter);
+		    importClass(java.io.BufferedWriter);
+
+			echo = project.createTask("echo");
+			echo.setMessage("Parsing mcmod.info...");
+			echo.perform();
+			
+			var resources = project.getProperty("resources.dir");
+			var file = new File(resources + "/mcmod.info");
+
+			fr = new FileReader(file);
+			br = new BufferedReader(fr);
+
+			// Read the file.
+			// This assumes the file has no line
+			var line;
+			var json = "";
+			while ((line = br.readLine()) != null) {
+				json += line;
+			}
+
+			var struct = JSON.parse(json);
+			var version = struct["modlist"][0].version;
+
+			echo = project.createTask("echo");
+			echo.setMessage("Parsed version: " + version);
+			echo.perform();
+
+			project.setProperty("mod.version", version);
+		</script>
+
+		<!-- Replace the version information in the mod class -->
+		<replace file="${mcpsrc.dir}/${versionclass.dir}/${versionclass.file}">
+		    <replacefilter token="$VERSION$" value="${mod.version}"/>
+		</replace>
+	</target>
+	
+	<target name="get-dependencies" depends="get-version" unless="${have-apis}">
+		<delete file="${download.dir}/necroapi.zip" />
+	
+		<echo message="Downloading NecroAPI... " />
+		<get src="https://github.com/Cannibalvox/NecroAPI/archive/master.zip" dest="${download.dir}/necroapi.zip" />
+	</target>
+	
+	<target name="extract-dependencies" depends="setup-forge,get-dependencies" unless="${have-apis}">
+		<delete dir="${mcpsrc.dir}/com/sirolf2009/necroapi/" />
+	
+		<echo message="Extracing NecroAPI... " />
+		<unzip src="${download.dir}/necroapi.zip" dest="${download.dir}" />
+		<move file="${download.dir}/NecroAPI-master/common/com" todir="${mcpsrc.dir}/" />
+	</target>
+
+	<available property="forge-exists" file="${download.dir}/minecraftforge-src-${forge.version}.zip" />
+	<available property="already-compiled" file="${classes.dir}/${src.dir}" />
+	<condition property="should-download-ant-contrib">
+		<or>
+			<available file="${download.dir}/ant-contrib/ant-contrib-1.0b3.jar"/>
+			<available file="${download.dir}/minecraftforge-src-${forge.version}.zip"/>
+		</or>
+	</condition>
+
+	<target name="install" depends="build">
+		<delete dir="${mcpsrc.dir}/${src.dir}" />
+		<delete dir="${dist.dir}" />
+		<jar destfile="${dist.dir}/${project.name}-${mod.version}-${build.number}.jar" basedir="${classes.dir}"/>
+		<delete dir="${classes.dir}" />
+		<delete dir="${mcp.dir}/reobf"/>
+		<delete dir="{$apiclasses.dir}" />
+		<delete dir="${mcpsrc.dir}/${src.dir}" />
+	</target>
+
+	<target name="build" depends="get-version,extract-dependencies" unless="already-compiled">
+		<!-- Recompile -->
+		<exec dir="${mcp.dir}" executable="cmd" osfamily="windows" failonerror="true">
+			<arg line="/c recompile.bat"/>
+		</exec>
+
+		<exec dir="${mcp.dir}" executable="sh" osfamily="unix" failonerror="true">
+			<arg value="recompile.sh" />
+		</exec>
+
+		<!-- Reobf -->
+		<exec dir="${mcp.dir}" executable="cmd" osfamily="windows">
+			<arg line="/c reobfuscate.bat --srgnames"/>
+		</exec>
+
+		<exec dir="${mcp.dir}" executable="sh" osfamily="unix">
+			<arg value="reobfuscate.sh" />
+		</exec>
+
+		<copy todir="${classes.dir}">
+			<fileset dir="${mcp.dir}/reobf/minecraft"/>
 		</copy>
-		<copy todir="${build.dir.development}\forge\mcp\src\minecraft">
-			<fileset dir="${build.dir.development}\source\NecroAPI\common\" />
+
+		<copy todir="${resourcePack.dir}">
+			<fileset dir="${resources.dir}" />
 		</copy>
+		
+		<copy todir="${classes.dir}">
+			<fileset file="${resources.dir}/mcmod.info" />
+		</copy>
+		
+		<copy todir="${classes.dir}">
+			<fileset file="${resources.dir}/pack.mcmeta" />
+		</copy>
+		
+		<delete file="${resourcePack.dir}/mcmod.info" />
+		
+		<delete file="${resourcePack.dir}/pack.mcmeta" />
 	</target>
 
-	<target name="replace_tokens">
-		<replace dir="${build.dir.development}\forge\mcp\src\minecraft" token="@VERSION@" value="${release.mod.version}" />
-		<replace dir="${build.dir.development}\forge\mcp\src\minecraft" token="@FINGERPRINT@" value="${release.mod.fingerprint}" />
+	<target name="build-number-there" if="env.BUILD_NUMBER" >
+		<echo message="Using build number ${env.BUILD_NUMBER}..." />
+		<property name="build.number" value="${env.BUILD_NUMBER}" />
 	</target>
 
-	<target name="recompile">
-		<exec dir="${build.dir.development}\forge\mcp" executable="cmd" osfamily="windows">
-			<arg line="/c recompile.bat" />
+	<target name="build-number-not-there" unless="env.BUILD_NUMBER" >
+		<echo message="!! No build number set !!" />
+		<property name="build.number" value="0" />
+	</target>
+
+	<target name="setup-forge" depends="download-forge,build-number-there,build-number-not-there" unless="forge.already.installed">
+
+		<property name="build.full" value="${build.number}" />
+		<unzip dest="${build.dir}">
+			<fileset dir="${download.dir}">
+				<include name="minecraftforge-src-${forge.version}.zip"/>
+			</fileset>
+		</unzip>
+
+		<!-- Change executables' permitions -->
+		<chmod file="${forge.dir}/install.sh" perm="+x"/>
+
+		<!-- Install forge -->
+		<delete dir="${mcp.dir}" failonerror="no"/>
+		<exec dir="${forge.dir}" executable="cmd" osfamily="windows" inputstring="Yes\n">
+			<arg line="/c install.cmd"/>
 		</exec>
-		<exec dir="${build.dir.development}\forge\mcp" executable="bash" osfamily="unix">
-			<arg line="recompile.sh" />
+
+		<exec dir="${forge.dir}" executable="sh" osfamily="unix" inputstring="Yes\n">
+			<arg value="install.sh" />
 		</exec>
+
+		<chmod file="${mcp.dir}/updatemd5.sh" perm="+x"/>
+		<chmod file="${mcp.dir}/recompile.sh" perm="+x"/>
+		<chmod file="${mcp.dir}/reobfuscate.sh" perm="+x"/>
+		<chmod file="${mcp.dir}/runtime/bin/astyle-osx" perm="+x" />
+		<chmod file="${mcp.dir}/runtime/bin/jad-osx" perm="+x" />
 	</target>
 
-	<target name="reobfuscate">
-		<exec dir="${build.dir.development}\forge\mcp" executable="cmd" osfamily="windows">
-			<arg line="/c reobfuscate_srg.bat" />
-		</exec>
-		<exec dir="${build.dir.development}\forge\mcp" executable="bash" osfamily="unix">
-			<arg line="reobfuscate_srg.sh" />
-		</exec>
+	<target name="download-forge" depends="download-ant-contrib" unless="forge-exists">
+		<taskdef resource="net/sf/antcontrib/antlib.xml">
+			<classpath>
+				<pathelement location="${download.dir}/ant-contrib/ant-contrib-1.0b3.jar"/>
+				<fileset dir="${download.dir}/ant-contrib/lib">
+					<include name="*.jar"/>
+				</fileset>
+			</classpath>
+		</taskdef>
+		<echo message="Downloading forge... " />
+		<get src="http://files.minecraftforge.net/minecraftforge-src-${forge.version}.zip"
+							dest="${download.dir}/minecraftforge-src-${forge.version}.zip" />
 	</target>
 
-	<target name="sign_jar">
-		<signjar jar="${build.dir.release}\Necromancy-${release.mod.version}-${release.minecraft.version}.jar" keystore="${build.keystore.location}" alias="${build.keystore.alias}" storepass="${build.keystore.password}" />
+	<target name="download-ant-contrib" unless="should-download-ant-contrib">
+		<echo message="Getting: ant-contrib"/>
+		<mkdir dir="${download.dir}/tmp"/>
+		<mkdir dir="${download.dir}/ant-contrib/lib" />
+		<get src="http://sourceforge.net/projects/ant-contrib/files/ant-contrib/1.0b3/ant-contrib-1.0b3-bin.zip/download" dest="${download.dir}/tmp/ant-contrib-1.0b3-bin.zip"/>
+		<get src="http://archive.apache.org/dist/commons/codec/binaries/commons-codec-1.6-bin.zip" dest="${download.dir}/tmp/commons-codec-1.6-bin.zip"/>
+
+		<unzip src="${download.dir}/tmp/ant-contrib-1.0b3-bin.zip" dest="${download.dir}"/>
+		<unzip src="${download.dir}/tmp/commons-codec-1.6-bin.zip" dest="${download.dir}/tmp"/>
+
+		<move todir="${download.dir}/ant-contrib/lib">
+			<fileset file="${download.dir}/tmp/commons-codec-1.6/commons-codec-1.6.jar"/>
+		</move>
+
+		<!-- Delete useless files -->
+		<delete dir="${download.dir}/ant-contrib/docs"/>
+		<delete dir="${download.dir}/tmp"/>
+
 	</target>
 
-	<target name="build">
-		<!-- Prep for the build -->
-		<antcall target="clean" />
-		<antcall target="prep" />
-		<antcall target="recompile" />		
-		<antcall target="reobfuscate" />
-
-		<!-- Build the jar -->
-		<mkdir dir="${build.dir.release}" />
-		<jar destfile="${build.dir.release}\Necromancy-universal-${release.mod.version}.jar">
-			<fileset dir="${build.dir.development}\forge\mcp\src\minecraft\" includes="mcmod.info" />
-			<fileset dir="${build.dir.development}\forge\mcp\reobf\minecraft" />
-			<fileset dir="${build.dir.development}\source\Necromancy\resources" excludes="**/xcf/**" />
-		</jar>
-
-		<!-- Clean up the MCP source now that we are done -->
-		<antcall target="clean" />
+	<target name="clean" >
+		<delete dir="${build.dir}" />
 	</target>
 
-	<target name="release">
-		<!-- Prep for the build -->
-       	 	<record name="log.txt" action="start"/>
-       	 	<echo>Did you set the MCMod.info version?</echo>
-		<input message="Mod version:" addproperty="release.mod.version" />
-		<input message="Minecraft version:" addproperty="release.minecraft.version" />
-		<antcall target="clean" />
-		<antcall target="prep" />
-		<antcall target="replace_tokens" />
-		<antcall target="recompile" />		
-		<antcall target="reobfuscate" />
 
-		<!-- Build the jar -->
-		<mkdir dir="${build.dir.release}" />
-		<jar destfile="${build.dir.release}\Necromancy-${release.mod.version}-${release.minecraft.version}.jar">
-			<fileset dir="${build.dir.development}\forge\mcp\src\minecraft\" includes="mcmod.info" />
-			<fileset dir="${build.dir.development}\forge\mcp\reobf\minecraft" />
-			<fileset dir="${build.dir.development}\source\Necromancy\resources" excludes="**/xcf/**" />
-		</jar>
-
-		<!-- Clean up the MCP source now that we are done -->
-		<antcall target="clean" />
-        	<record name="log.txt" action="stop"/>
-	</target>
 </project>
