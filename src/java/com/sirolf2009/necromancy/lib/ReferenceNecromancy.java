@@ -5,7 +5,7 @@ import net.minecraft.util.ResourceLocation;
 public class ReferenceNecromancy {
     public static final String MOD_ID = "necromancy";
     public static final String MOD_NAME = "Necromancy";
-    public static final String MOD_VERSION = "@VERSION@";
+    public static final String MOD_VERSION = "$VERSION$";
     public static final String MOD_FINGERPRINT = "@FINGERPRINT@";
 
     public static final String LOC_RESOURCES_SOUNDS = "/sounds";
@@ -36,8 +36,8 @@ public class ReferenceNecromancy {
     public static final ResourceLocation TEXTURES_GUI_ALTAR = new ResourceLocation(MOD_ID, LOC_RESOURCES_TEXTURES_GUIS+"/altargui.png");
     public static final ResourceLocation TEXTURES_GUI_SEWING = new ResourceLocation(MOD_ID, LOC_RESOURCES_TEXTURES_GUIS+"/sewinggui.png");
     public static final ResourceLocation TEXTURES_GUI_SCENTBURNER = new ResourceLocation(MOD_ID, LOC_RESOURCES_TEXTURES_GUIS+"/scentburnergui.png");
-    
+
     public static final ResourceLocation TEXTURES_PARTICLES = new ResourceLocation(MOD_ID, LOC_RESOURCES_TEXTURES+"/particles.png");
-    
+
     public static final ResourceLocation TEXTURES_MISC_CHRISTMASHAT = new ResourceLocation("MOD_ID", LOC_RESOURCES_TEXTURES_ENTITIES+"/christmashat.png");
 }
