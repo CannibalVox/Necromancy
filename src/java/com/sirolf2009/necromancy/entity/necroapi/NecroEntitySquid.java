@@ -79,23 +79,23 @@ public class NecroEntitySquid extends NecroEntityBase {
     @Override
 	public void setAttributes(EntityLivingBase minion, BodyPartLocation location) {
 		if(location == BodyPartLocation.Head) {
-			head[0].attributes.func_111150_b(SharedMonsterAttributes.field_111267_a).func_111128_a(2.0D); //health
-			head[0].attributes.func_111150_b(SharedMonsterAttributes.field_111265_b).func_111128_a(16.0D); //followrange
-			head[0].attributes.func_111150_b(SharedMonsterAttributes.field_111266_c).func_111128_a(0.0D); //knockback res
-			head[0].attributes.func_111150_b(SharedMonsterAttributes.field_111263_d).func_111128_a(0.0D); //speed
-			head[0].attributes.func_111150_b(SharedMonsterAttributes.field_111264_e).func_111128_a(0.0D); //damage
+			head[0].attributes.func_111150_b(SharedMonsterAttributes.maxHealth).setAttribute(2.0D); //health
+			head[0].attributes.func_111150_b(SharedMonsterAttributes.followRange).setAttribute(16.0D); //followrange
+			head[0].attributes.func_111150_b(SharedMonsterAttributes.knockbackResistance).setAttribute(0.0D); //knockback res
+			head[0].attributes.func_111150_b(SharedMonsterAttributes.movementSpeed).setAttribute(0.0D); //speed
+			head[0].attributes.func_111150_b(SharedMonsterAttributes.attackDamage).setAttribute(0.0D); //damage
 		} else if(location == BodyPartLocation.Torso) {
-			torso[0].attributes.func_111150_b(SharedMonsterAttributes.field_111267_a).func_111128_a(6.0D); //health
-			torso[0].attributes.func_111150_b(SharedMonsterAttributes.field_111265_b).func_111128_a(0.0D); //followrange
-			torso[0].attributes.func_111150_b(SharedMonsterAttributes.field_111266_c).func_111128_a(0.0D); //knockback res
-			torso[0].attributes.func_111150_b(SharedMonsterAttributes.field_111263_d).func_111128_a(0.0D); //speed
-			torso[0].attributes.func_111150_b(SharedMonsterAttributes.field_111264_e).func_111128_a(0.0D); //damage
+			torso[0].attributes.func_111150_b(SharedMonsterAttributes.maxHealth).setAttribute(6.0D); //health
+			torso[0].attributes.func_111150_b(SharedMonsterAttributes.followRange).setAttribute(0.0D); //followrange
+			torso[0].attributes.func_111150_b(SharedMonsterAttributes.knockbackResistance).setAttribute(0.0D); //knockback res
+			torso[0].attributes.func_111150_b(SharedMonsterAttributes.movementSpeed).setAttribute(0.0D); //speed
+			torso[0].attributes.func_111150_b(SharedMonsterAttributes.attackDamage).setAttribute(0.0D); //damage
 		} else if(location == BodyPartLocation.Legs) {
-			legs[0].attributes.func_111150_b(SharedMonsterAttributes.field_111267_a).func_111128_a(2.0D); //health
-			legs[0].attributes.func_111150_b(SharedMonsterAttributes.field_111265_b).func_111128_a(0.0D); //followrange
-			legs[0].attributes.func_111150_b(SharedMonsterAttributes.field_111266_c).func_111128_a(0.0D); //knockback res
-			legs[0].attributes.func_111150_b(SharedMonsterAttributes.field_111263_d).func_111128_a(0.7D); //speed
-			legs[0].attributes.func_111150_b(SharedMonsterAttributes.field_111264_e).func_111128_a(0.0D); //damage
+			legs[0].attributes.func_111150_b(SharedMonsterAttributes.maxHealth).setAttribute(2.0D); //health
+			legs[0].attributes.func_111150_b(SharedMonsterAttributes.followRange).setAttribute(0.0D); //followrange
+			legs[0].attributes.func_111150_b(SharedMonsterAttributes.knockbackResistance).setAttribute(0.0D); //knockback res
+			legs[0].attributes.func_111150_b(SharedMonsterAttributes.movementSpeed).setAttribute(0.7D); //speed
+			legs[0].attributes.func_111150_b(SharedMonsterAttributes.attackDamage).setAttribute(0.0D); //damage
 		}
 	}
 }

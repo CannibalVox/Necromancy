@@ -28,7 +28,7 @@ public class ItemScythe extends ItemSword {
     @Override
     public boolean hitEntity(ItemStack par1ItemStack, EntityLivingBase par2EntityLivingBase, EntityLivingBase par3EntityLivingBase) {
         par1ItemStack.damageItem(1, par3EntityLivingBase);
-        if (par2EntityLivingBase.func_110143_aJ() <= 0)
+        if (par2EntityLivingBase.getHealth() <= 0)
             if (((EntityPlayer) par3EntityLivingBase).inventory.consumeInventoryItem(Item.glassBottle.itemID)) {
                 ((EntityPlayer) par3EntityLivingBase).inventory.addItemStackToInventory(ItemGeneric.getItemStackFromName("Soul in a Jar"));
                 if (FMLCommonHandler.instance().getSide() == Side.CLIENT) {

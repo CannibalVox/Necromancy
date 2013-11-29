@@ -35,7 +35,7 @@ public class EntityNecroFX extends EntityFX {
         Tessellator tessellator1 = new Tessellator();
         tessellator1.startDrawingQuads();
         tessellator1.setBrightness(getBrightnessForRender(par2));
-        ClientProxy.mc.renderEngine.func_110577_a(ReferenceNecromancy.TEXTURES_PARTICLES);
+        ClientProxy.mc.renderEngine.bindTexture(ReferenceNecromancy.TEXTURES_PARTICLES);
         float f = 32F;
         float f1 = f + 0.0624375F;
         float f2 = 32F;
