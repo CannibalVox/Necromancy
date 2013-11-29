@@ -3,7 +3,7 @@
 
 	<property name="project.name" value="Necromancy" />
 	<property name="src.dir" value="src/java" />
-	<property name="resources.dir" value="src/assets/Necromancy" />
+	<property name="resources.dir" value="src/assets" />
 	<property name="versionclass.dir" value="com\sirolf2009\necromancy\lib" />
 	<property name="versionclass.file" value="ReferenceNecromancy.java"/>
 
@@ -13,7 +13,7 @@
 
 	<property name="build.dir" value="build" />
 	<property name="classes.dir" value="${build.dir}/packaging" />
-	<property name="resourcePack.dir" value="${classes.dir}/assets/Necromancy" />
+	<property name="resourcePack.dir" value="${classes.dir}/assets/" />
 	<property name="apiclasses.dir" value="${build.dir}/api-packaging" />
 	<property name="forge.version" value="${minecraft.version}-${forge.forgeversion}.${forge.buildnum}" />
 	<property name="forge.url" value="http://files.minecraftforge.net/minecraftforge/minecraftforge-src-${forge.version}.zip" />
