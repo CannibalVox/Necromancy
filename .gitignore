@@ -1,0 +1,15 @@
+# Eclipse Files
+bin/
+.classpath
+.project
+.settings/
+
+# Windows Files
+Thumbs.db
+
+# Debug Files
+Start.java
+minecraft/
+
+# Ant Folders
+build/
