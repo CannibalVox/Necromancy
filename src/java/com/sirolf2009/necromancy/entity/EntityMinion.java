@@ -44,17 +44,17 @@ import com.sirolf2009.necromancy.tileentity.TileEntityAltar;
 import cpw.mods.fml.common.FMLCommonHandler;
 
 public class EntityMinion extends EntityTameable {
-	
+
 	private boolean isAgressive;
 	private BaseAttributeMap attributeMap;
-	
+
 	public EntityMinion(World par1World, BodyPart[][] bodypart, String owner) {
 		this(par1World);
 		setBodyParts(bodypart);
 		setTamed(true);
 		setOwner(owner);
 	}
-	
+
 	public EntityMinion(World par1World) {
 		super(par1World);
 		getNavigator().setAvoidsWater(true);
@@ -77,14 +77,14 @@ public class EntityMinion extends EntityTameable {
 		dataWatcher.addObject(26, Byte.valueOf((byte) 0));
 		onBodyChange();
 	}
-	
+
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
 		getAttributeMap().getAttributeInstance(SharedMonsterAttributes.maxHealth).setAttribute(Double.MAX_VALUE);
 		getAttributeMap().func_111150_b(SharedMonsterAttributes.attackDamage);
 	}
-	
+
 	public void updateAttributes() {
 		if(getBodyParts().length > 0) {
 			attributeMap = new ServersideAttributeMap();
@@ -121,17 +121,17 @@ public class EntityMinion extends EntityTameable {
 			setHealth((float) (getHealth() > getEntityAttribute(SharedMonsterAttributes.maxHealth).getBaseValue() ? getEntityAttribute(SharedMonsterAttributes.maxHealth).getBaseValue() : getHealth()));
 		}
 	}
-	
+
 	public void combineAttributes(BaseAttributeMap map) {
 		Iterator<ModifiableAttributeInstance> itr = map.getAllAttributes().iterator();
 		while(itr.hasNext()) {
 			ModifiableAttributeInstance incrementAttribute = itr.next();
-			double oldValue = func_110140_aT().getAttributeInstanceByName(incrementAttribute.func_111123_a().getAttributeUnlocalizedName()).getBaseValue();
+			double oldValue = getAttributeMap().getAttributeInstanceByName(incrementAttribute.func_111123_a().getAttributeUnlocalizedName()).getBaseValue();
 			double increment = incrementAttribute.getBaseValue();
-			func_110140_aT().getAttributeInstanceByName(incrementAttribute.func_111123_a().getAttributeUnlocalizedName()).func_111128_a(oldValue + increment);
+			getAttributeMap().getAttributeInstanceByName(incrementAttribute.func_111123_a().getAttributeUnlocalizedName()).setAttribute(oldValue + increment);
 		}
 	}
-	
+
 	@Override
 	public BaseAttributeMap getAttributeMap() {
 		if (this.attributeMap == null) {
@@ -139,7 +139,7 @@ public class EntityMinion extends EntityTameable {
 		}
 		return this.attributeMap;
 	}
-	
+
 	public void dataWatcherUpdate() {
 		if (getBodyPartsNames()[0] != "UNDEFINED") {
 			dataWatcher.updateObject(20, getBodyPartsNames()[0]);
@@ -159,7 +159,7 @@ public class EntityMinion extends EntityTameable {
 		setSaddled(getSaddled());
 		setAltarMob(isAltarMob());
 	}
-	
+
 	private void updateBodyParts() {
 		head = getBodyPartFromlocation(BodyPartLocation.Head, dataWatcher.getWatchableObjectString(20));
 		torso = getBodyPartFromlocation(BodyPartLocation.Torso, dataWatcher.getWatchableObjectString(21));
@@ -167,7 +167,7 @@ public class EntityMinion extends EntityTameable {
 		armRight = getBodyPartFromlocation(BodyPartLocation.ArmRight, dataWatcher.getWatchableObjectString(23));
 		leg = getBodyPartFromlocation(BodyPartLocation.Legs, legType = dataWatcher.getWatchableObjectString(24));
 	}
-	
+
 	@Override
 	public void writeEntityToNBT(NBTTagCompound par1NBTTagCompound) {
 		super.writeEntityToNBT(par1NBTTagCompound);
@@ -179,7 +179,7 @@ public class EntityMinion extends EntityTameable {
 		par1NBTTagCompound.setString("leg", getBodyPartsNames()[4]);
 		par1NBTTagCompound.setBoolean("Saddle", getSaddled());
 	}
-	
+
 	@Override
 	public void readEntityFromNBT(NBTTagCompound par1NBTTagCompound) {
 		super.readEntityFromNBT(par1NBTTagCompound);
@@ -192,12 +192,12 @@ public class EntityMinion extends EntityTameable {
 		dataWatcherUpdate();
 		updateAttributes();
 	}
-	
+
 	@Override
 	protected void entityInit() {
 		super.entityInit();
 	}
-	
+
 	@Override
 	public boolean attackEntityAsMob(Entity par1Entity) {
 		if (getOwner() != null)
@@ -205,13 +205,13 @@ public class EntityMinion extends EntityTameable {
 		else
 			return par1Entity.attackEntityFrom(DamageSource.causeMobDamage(this), 8);
 	}
-	
+
 	@Override
 	public boolean canBeSteered() {
 		ItemStack var1 = ((EntityPlayer) riddenByEntity).getHeldItem();
 		return var1 != null && var1.itemID == ItemGeneric.getItemStackFromName("Brain on a Stick").getItem().itemID;
 	}
-	
+
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
@@ -245,7 +245,7 @@ public class EntityMinion extends EntityTameable {
 			this.setDead();
 		}
 	}
-	
+
 	public static BodyPart[] getBodyPartFromlocation(BodyPartLocation location, String name) {
 		NecroEntityBase mob;
 		if ((mob = NecroEntityRegistry.registeredEntities.get(name)) != null) {
@@ -264,7 +264,7 @@ public class EntityMinion extends EntityTameable {
 		}
 		return null;
 	}
-	
+
 	@Override
 	public boolean interact(EntityPlayer par1EntityPlayer) {
 		if (!getSaddled() && !worldObj.isRemote && par1EntityPlayer.getHeldItem() != null && par1EntityPlayer.getHeldItem().getItem() == Item.saddle) {
@@ -309,11 +309,11 @@ public class EntityMinion extends EntityTameable {
 		}
 		return true;
 	}
-	
+
 	public boolean getSaddled() {
 		return (dataWatcher.getWatchableObjectByte(25) & 1) != 0;
 	}
-	
+
 	public void setSaddled(boolean par1) {
 		if (par1) {
 			dataWatcher.updateObject(25, Byte.valueOf((byte) 1));
@@ -321,12 +321,12 @@ public class EntityMinion extends EntityTameable {
 			dataWatcher.updateObject(25, Byte.valueOf((byte) 0));
 		}
 	}
-	
+
 	@Override
 	public boolean isAIEnabled() {
 		return true;
 	}
-	
+
 	public void setBodyPart(BodyPartLocation location, BodyPart[] bodypart) {
 		if (location == BodyPartLocation.Head) {
 			head = bodypart;
@@ -343,44 +343,44 @@ public class EntityMinion extends EntityTameable {
 		}
 		dataWatcherUpdate();
 	}
-	
+
 	@Override
 	public String toString() {
 		return String.format("%s[\'%s\'/%d, l=\'%s\', x=%.1f, y=%.1f, z=%.1f, head=\'%s\', torso=\'%s\', armLeft=\'%s\', armRight=\'%s\', legs=\'%s\']", new Object[] { this.getClass().getSimpleName(), this.getEntityName(), Integer.valueOf(entityId), worldObj == null ? "~NULL~" : worldObj.getWorldInfo().getWorldName(), Double.valueOf(posX), Double.valueOf(posY), Double.valueOf(posZ), getBodyPartsNames()[0], getBodyPartsNames()[1], getBodyPartsNames()[2], getBodyPartsNames()[3], getBodyPartsNames()[4] });
 	}
-	
+
 	public String[] getBodyPartsNames() {
 		String list[] = { head != null && head.length > 0 && head[0] != null ? head[0].name : "UNDEFINED", torso != null && torso.length > 0 && torso[0] != null ? torso[0].name : "UNDEFINED", armLeft != null && armLeft.length > 0 && armLeft[0] != null ? armLeft[0].name : "UNDEFINED", armRight != null && armRight.length > 0 && armRight[0] != null ? armRight[0].name : "UNDEFINED", leg != null && leg.length > 0 && leg[0] != null ? leg[0].name : "UNDEFINED", };
 		return list;
 	}
-	
+
 	public BodyPart[][] getBodyParts() {
 		BodyPart[][] list = { head, torso, armLeft, armRight, leg };
 		return list;
 	}
-	
+
 	public void onBodyChange() {
 		if (model != null) {
 			model.updateModel(this, isAltarMob);
 		}
 	}
-	
+
 	public ModelMinion getModel() {
 		return model;
 	}
-	
+
 	public void setModel(ModelMinion model) {
 		this.model = model;
 	}
-	
+
 	public EntityAnimal spawnBabyAnimal(EntityAnimal var1) {
 		return null;
 	}
-	
+
 	public boolean isAltarMob() {
 		return isAltarMob;
 	}
-	
+
 	public void setAltarMob(boolean isAltarMob) {
 		this.isAltarMob = isAltarMob;
 		if (isAltarMob) {
@@ -389,7 +389,7 @@ public class EntityMinion extends EntityTameable {
 			dataWatcher.updateObject(26, Byte.valueOf((byte) 0));
 		}
 	}
-	
+
 	public void setBodyParts(BodyPart[][] bodypart) {
 		head = bodypart[0];
 		torso = bodypart[1];
@@ -398,36 +398,36 @@ public class EntityMinion extends EntityTameable {
 		leg = bodypart[4];
 		dataWatcherUpdate();
 	}
-	
+
 	public void setAltar(TileEntityAltar tileEntityAltar) {
 		altar = tileEntityAltar;
 	}
-	
+
 	@Override
 	public EntityAgeable createChild(EntityAgeable var1) {
 		return null;
 	}
-	
+
 	@Override
 	protected String getLivingSound() {
 		return "mob." + aiMinion.getSound(this) + ".say";
 	}
-	
+
 	@Override
 	protected String getHurtSound() {
 		return "mob." + aiMinion.getSound(this) + ".hurt";
 	}
-	
+
 	@Override
 	protected String getDeathSound() {
 		return "mob." + aiMinion.getSound(this) + ".death";
 	}
-	
+
 	@Override
 	public void onDeath(DamageSource par1DamageSource) {
 		getOwner().getEntityData().setInteger("minions", getOwner().getEntityData().getInteger("minions") - 1);
 	}
-	
+
 	protected String legType = "";
 	protected BodyPart[] head, torso, armLeft, armRight, leg;
 	protected ModelMinion model = new ModelMinion();

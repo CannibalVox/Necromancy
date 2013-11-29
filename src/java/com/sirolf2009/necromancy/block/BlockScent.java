@@ -37,7 +37,7 @@ public class BlockScent extends Block implements ITileEntityProvider {
 	public BlockScent(int i) {
 		super(i, Material.air);
 		this.setCreativeTab(Necromancy.tabNecromancy);
-		func_111022_d("necromancy:scent");
+		setTextureName("necromancy:scent");
 	}
 
 	public void randomDisplayTick(World par1World, int par2, int par3, int par4, Random par5Random) {

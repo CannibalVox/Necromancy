@@ -59,7 +59,7 @@ public class ModelMinion extends ModelBase {
                     part.render(par7);
                 }
                 if (mob instanceof ISaddleAble && minion.getSaddled()) {
-                    renderer.bindTexture(((ISaddleAble)mob).getSaddleTex());
+                    renderer.setTexture(((ISaddleAble)mob).getSaddleTex());
                     for (BodyPart part : torso) {
                         part.render(par7);
                     }
@@ -97,7 +97,7 @@ public class ModelMinion extends ModelBase {
             if (isChristmas() && santahat != null) {
                 textureHeight = 32;
                 textureWidth = 64;
-                renderer.bindTexture(ReferenceNecromancy.TEXTURES_MISC_CHRISTMASHAT);
+                renderer.setTexture(ReferenceNecromancy.TEXTURES_MISC_CHRISTMASHAT);
                 santahat.render(par7 + 0.001F);
             }
             bindTexByPart(parts[0]);
@@ -116,7 +116,7 @@ public class ModelMinion extends ModelBase {
         if (mob != null) {
             textureHeight = mob.textureHeight;
             textureWidth = mob.textureWidth;
-            renderer.bindTexture(mob.texture);
+            renderer.setTexture(mob.texture);
         }
     }
 

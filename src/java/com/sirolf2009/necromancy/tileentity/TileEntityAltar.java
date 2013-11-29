@@ -316,7 +316,7 @@ public class TileEntityAltar extends TileEntity implements IInventory {
     }
 
     public boolean soulCheck() {
-        if (getStackInSlot(1).getItem() == ItemGeneric.getItemStackFromName("Soul in a Jar").getItem() || "item.HSBottledSoul".equals(getStackInSlot(1).getItemName()))
+        if (getStackInSlot(1).getItem() == ItemGeneric.getItemStackFromName("Soul in a Jar").getItem() || "item.HSBottledSoul".equals(getStackInSlot(1).getUnlocalizedName()))
             return true;
         return false;
     }

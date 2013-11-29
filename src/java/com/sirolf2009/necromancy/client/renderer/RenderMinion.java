@@ -15,12 +15,12 @@ public class RenderMinion extends RenderLiving {
         setRenderPassModel(model);
     }
     
-    public void bindTexture(ResourceLocation par1ResourceLocation) {
-        func_110776_a(par1ResourceLocation);
+    public void setTexture(ResourceLocation par1ResourceLocation) {
+        bindTexture(par1ResourceLocation);
     }
 
     @Override
-    protected ResourceLocation func_110775_a(Entity entity) {
+    protected ResourceLocation getEntityTexture(Entity entity) {
         return new ResourceLocation("textures/entity/zombie/zombie.png");
     }
 }
