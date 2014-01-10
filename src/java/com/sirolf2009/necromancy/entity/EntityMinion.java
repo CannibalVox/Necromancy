@@ -88,11 +88,11 @@ public class EntityMinion extends EntityTameable {
 	public void updateAttributes() {
 		if(getBodyParts().length > 0) {
 			attributeMap = new ServersideAttributeMap();
-			attributeMap.getAttributeInstance(SharedMonsterAttributes.maxHealth);
-			attributeMap.getAttributeInstance(SharedMonsterAttributes.followRange);
-			attributeMap.getAttributeInstance(SharedMonsterAttributes.knockbackResistance);
-			attributeMap.getAttributeInstance(SharedMonsterAttributes.movementSpeed);
-			attributeMap.getAttributeInstance(SharedMonsterAttributes.attackDamage);
+			attributeMap.func_111150_b(SharedMonsterAttributes.maxHealth);
+			attributeMap.func_111150_b(SharedMonsterAttributes.followRange);
+			attributeMap.func_111150_b(SharedMonsterAttributes.knockbackResistance);
+			attributeMap.func_111150_b(SharedMonsterAttributes.movementSpeed);
+			attributeMap.func_111150_b(SharedMonsterAttributes.attackDamage);
 			if(head != null && head.length > 0  && head[0] != null) {
 				head[0].attributes = new ServersideAttributeMap();
 				head[0].entity.setAttributes(this, BodyPartLocation.Head);
