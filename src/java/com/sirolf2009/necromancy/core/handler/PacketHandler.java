@@ -129,9 +129,9 @@ public class PacketHandler implements IPacketHandler, IGuiHandler, ICraftingHand
 	@SuppressWarnings("unchecked")
 	@Override
 	public void manipulateTradesForVillager(EntityVillager villager, MerchantRecipeList recipeList, Random random) {
-		recipeList.add(new MerchantRecipe(new ItemStack(Item.emerald, 6), new ItemStack(Item.book), new ItemStack(ItemNecromancy.necronomicon)));
-		recipeList.add(new MerchantRecipe(new ItemStack(Item.emerald, new Random().nextInt(3)), null, new ItemStack(ItemNecromancy.bodyparts, 1, random.nextInt(ItemBodyPart.necroEntities.size() - 1))));
-		recipeList.add(new MerchantRecipe(new ItemStack(ItemNecromancy.bodyparts, 1, random.nextInt(ItemBodyPart.necroEntities.size() - 1)), null, new ItemStack(Item.emerald, new Random().nextInt(3))));
-		recipeList.add(new MerchantRecipe(new ItemStack(ItemNecromancy.bodyparts, 1, random.nextInt(ItemBodyPart.necroEntities.size() - 1)), null, new ItemStack(Item.emerald, new Random().nextInt(3))));
+		recipeList.addToListWithCheck(new MerchantRecipe(new ItemStack(Item.emerald, 6), new ItemStack(Item.book), new ItemStack(ItemNecromancy.necronomicon)));
+		recipeList.addToListWithCheck(new MerchantRecipe(new ItemStack(Item.emerald, new Random().nextInt(3)), null, new ItemStack(ItemNecromancy.bodyparts, 1, random.nextInt(ItemBodyPart.necroEntities.size() - 1))));
+		recipeList.addToListWithCheck(new MerchantRecipe(new ItemStack(ItemNecromancy.bodyparts, 1, random.nextInt(ItemBodyPart.necroEntities.size() - 1)), null, new ItemStack(Item.emerald, new Random().nextInt(3))));
+		recipeList.addToListWithCheck(new MerchantRecipe(new ItemStack(ItemNecromancy.bodyparts, 1, random.nextInt(ItemBodyPart.necroEntities.size() - 1)), null, new ItemStack(Item.emerald, new Random().nextInt(3))));
 	}
 }
