@@ -342,4 +342,7 @@ public class TileEntityAltar extends TileEntity implements IInventory {
     public boolean isItemValidForSlot(int i, ItemStack itemstack) {
         return false;
     }
+
+    @Override
+    public boolean canUpdate() { return false; }
 }
